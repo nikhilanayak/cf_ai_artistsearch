@@ -5,7 +5,7 @@ Find similar artists across genres and generate songs that blend their styles. U
 ## Live App
 https://artistsearch.nikhil-a-nayak.workers.dev/
 
-**NOTE to Cloudflare Hiring Managers, etc.:** If you want to use the app locally, you will need to enter a password. This password is the email used to apply for the Cloudflare position. This app is run on personal billing; please enjoy with this in mind!
+**NOTE to Cloudflare Hiring Managers, etc.:** If you want to use the app on the link, you will need to enter a password. This password is the email I used to apply for the Cloudflare position. This app is run on my personal billing; please enjoy with this in mind!
 
 
 ## Features
@@ -17,6 +17,5 @@ https://artistsearch.nikhil-a-nayak.workers.dev/
 
 ## Technical Components
 - Embeddings use Cloudflare Vectorize (@cf/baai/bge-large-en-v1.5)
-- Text generation uses Cloudflare Workers AI(
-@cf/meta/llama-3.1-70b-instruct)
-- 
+- Text generation uses Cloudflare Workers AI(@cf/meta/llama-3.1-70b-instruct)
+- Frontend uses Cloudflare Pages (using `agents-starter` as a starting point)

@@ -3,6 +3,7 @@ import { Card } from "@/components/card/Card";
 import { Button } from "@/components/button/Button";
 import type { ArtistFeatures } from "@/feature-extractor";
 import type { ComparisonResult } from "@/comparison-engine";
+import { fixArtistName } from "@/lib/utils";
 
 interface FeatureBreakdownProps {
   sourceArtist: string;
@@ -44,7 +45,7 @@ export function FeatureBreakdown({
           <div className="mt-2 space-y-3 p-3 bg-neutral-50 dark:bg-neutral-900 rounded">
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">
-                {sourceArtist} Themes
+                {fixArtistName(sourceArtist)} Themes
               </div>
               <div className="flex flex-wrap gap-1">
                 {sourceFeatures.themes.map((theme, idx) => (
@@ -63,7 +64,7 @@ export function FeatureBreakdown({
             </div>
             <div>
               <div className="text-xs font-medium text-muted-foreground mb-1">
-                {targetArtist} Themes
+                {fixArtistName(targetArtist)} Themes
               </div>
               <div className="flex flex-wrap gap-1">
                 {targetFeatures.themes.map((theme, idx) => (
@@ -139,7 +140,7 @@ export function FeatureBreakdown({
               </div>
               <div>
                 <div className="text-xs font-medium text-muted-foreground mb-1">
-                  {targetArtist}
+                  {fixArtistName(targetArtist)}
                 </div>
                 <div className="space-y-1">
                   {targetFeatures.musicalCharacteristics.tempo && (
@@ -209,7 +210,7 @@ export function FeatureBreakdown({
               </div>
               <div>
                 <div className="text-xs font-medium text-muted-foreground mb-1">
-                  {targetArtist}
+                  {fixArtistName(targetArtist)}
                 </div>
                 <div className="space-y-1">
                   <div>Complexity: {targetFeatures.lyricalStyle.complexity}</div>

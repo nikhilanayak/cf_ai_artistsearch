@@ -15,6 +15,7 @@ import { Textarea } from "@/components/textarea/Textarea";
 import { MemoizedMarkdown } from "@/components/memoized-markdown";
 import { ToolInvocationCard } from "@/components/tool-invocation-card/ToolInvocationCard";
 import { ArtistEquivalence } from "@/components/artist-equivalence/ArtistEquivalence";
+import { formatGenreDisplay } from "@/lib/utils";
 
 // Icon imports
 import {
@@ -312,7 +313,7 @@ function ChatPage({
           <div className="flex-1">
             <h2 className="font-semibold text-base">
               {preselectedArtists 
-                ? `${preselectedArtists.sourceArtist} writes ${preselectedArtists.targetGenre} in style of ${preselectedArtists.targetArtist}`
+                ? `${preselectedArtists.sourceArtist} writes ${formatGenreDisplay(preselectedArtists.targetGenre)} in style of ${preselectedArtists.targetArtist}`
                 : "AI Chat Agent"}
             </h2>
           </div>
@@ -358,12 +359,12 @@ function ChatPage({
                   </div>
                   <h3 className="font-semibold text-lg">
                     {preselectedArtists 
-                      ? `${preselectedArtists.sourceArtist} writes ${preselectedArtists.targetGenre} in style of ${preselectedArtists.targetArtist}`
+                      ? `${preselectedArtists.sourceArtist} writes ${formatGenreDisplay(preselectedArtists.targetGenre)} in style of ${preselectedArtists.targetArtist}`
                       : "Welcome to AI Chat"}
                   </h3>
                   <p className="text-muted-foreground text-sm">
                     {preselectedArtists
-                      ? `Generating a song as if ${preselectedArtists.sourceArtist} wrote a ${preselectedArtists.targetGenre} song in the style of ${preselectedArtists.targetArtist}...`
+                      ? `Generating a song as if ${preselectedArtists.sourceArtist} wrote a ${formatGenreDisplay(preselectedArtists.targetGenre)} song in the style of ${preselectedArtists.targetArtist}...`
                       : "Start a conversation with your AI assistant. Try asking about:"}
                   </p>
                   {!preselectedArtists && (

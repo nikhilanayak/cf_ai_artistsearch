@@ -1,5 +1,6 @@
 import { Card } from "@/components/card/Card";
 import type { ComparisonResult } from "@/comparison-engine";
+import { formatGenreDisplay, fixArtistName } from "@/lib/utils";
 
 interface ComparisonCardProps {
   sourceArtist: string;
@@ -22,8 +23,8 @@ export function ComparisonCard({
         {/* Source Artist */}
         <div className="space-y-3">
           <div>
-            <div className="font-semibold text-lg">{sourceArtist}</div>
-            <div className="text-sm text-muted-foreground">{sourceGenre}</div>
+            <div className="font-semibold text-lg">{fixArtistName(sourceArtist)}</div>
+            <div className="text-sm text-muted-foreground">{formatGenreDisplay(sourceGenre)}</div>
           </div>
           
           {explanation.sharedCharacteristics.themes.length > 0 && (
@@ -46,8 +47,8 @@ export function ComparisonCard({
         {/* Target Artist */}
         <div className="space-y-3">
           <div>
-            <div className="font-semibold text-lg">{targetArtist}</div>
-            <div className="text-sm text-muted-foreground">{targetGenre}</div>
+            <div className="font-semibold text-lg">{fixArtistName(targetArtist)}</div>
+            <div className="text-sm text-muted-foreground">{formatGenreDisplay(targetGenre)}</div>
           </div>
           
           {explanation.sharedCharacteristics.themes.length > 0 && (

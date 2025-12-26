@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/card/Card";
 import { Button } from "@/components/button/Button";
 import type { ComparisonResult } from "@/comparison-engine";
+import { fixArtistName } from "@/lib/utils";
 
 interface ExplanationSummaryProps {
   sourceArtist: string;
@@ -19,7 +20,7 @@ export function ExplanationSummary({
   return (
     <Card className="p-4 space-y-4">
       <div>
-        <h4 className="font-semibold mb-2">Why {sourceArtist} matches {targetArtist}</h4>
+        <h4 className="font-semibold mb-2">Why {fixArtistName(sourceArtist)} matches {fixArtistName(targetArtist)}</h4>
         <p className="text-sm text-muted-foreground leading-relaxed">
           {explanation.userFriendlyExplanation}
         </p>

@@ -8,6 +8,7 @@ import { FeatureBreakdown } from "@/components/artist-comparison/FeatureBreakdow
 import type { ComparisonResult } from "@/comparison-engine";
 import type { ArtistFeatures } from "@/feature-extractor";
 import { apiFetch } from "@/api-utils";
+import { formatGenreDisplay, fixArtistName } from "@/lib/utils";
 
 interface Artist {
   name: string;
@@ -131,10 +132,6 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
       });
   }, [genres, targetGenreSearch]);
 
-  // Helper to format genre display (rb -> r&b)
-  const formatGenreDisplay = (genre: string) => {
-    return genre.toLowerCase() === "rb" ? "r&b" : genre;
-  };
 
   const handleFindEquivalent = async () => {
     if (!selectedArtist || !selectedGenre || !selectedArtistData) {
@@ -377,7 +374,7 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
                       selectedArtist === artist.name ? "bg-neutral-100 dark:bg-neutral-800" : ""
                     }`}
                   >
-                    <div className="font-medium">{artist.name}</div>
+                    <div className="font-medium">{fixArtistName(artist.name)}</div>
                     <div className="text-xs text-muted-foreground">{formatGenreDisplay(artist.genre)}</div>
                   </button>
                 ))
@@ -390,7 +387,7 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
           )}
           {selectedArtist && (
             <div className="mt-2 text-sm text-muted-foreground">
-              Selected: <span className="font-medium">{selectedArtist}</span>
+              Selected: <span className="font-medium">{fixArtistName(selectedArtist)}</span>
               {selectedArtistData && (
                 <span className="ml-2">({formatGenreDisplay(selectedArtistData.genre)})</span>
               )}
@@ -486,8 +483,8 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
               <Card className="p-4 bg-neutral-100 dark:bg-neutral-900">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <div className="font-semibold text-lg">{result.artist}</div>
-                    <div className="text-sm text-muted-foreground">{result.genre}</div>
+                    <div className="font-semibold text-lg">{fixArtistName(result.artist)}</div>
+                    <div className="text-sm text-muted-foreground">{formatGenreDisplay(result.genre)}</div>
                   </div>
                   <div className="text-sm font-mono text-muted-foreground">
                     Similarity: {(result.score * 100).toFixed(1)}%
@@ -497,16 +494,16 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
                 {result.explanation && selectedArtistData && (
                   <>
                     <ExplanationSummary
-                      sourceArtist={selectedArtistData.name}
-                      targetArtist={result.artist}
+                      sourceArtist={fixArtistName(selectedArtistData.name)}
+                      targetArtist={fixArtistName(result.artist)}
                       explanation={result.explanation}
                     />
                     
                     <div className="mt-4">
                       <ComparisonCard
-                        sourceArtist={selectedArtistData.name}
+                        sourceArtist={fixArtistName(selectedArtistData.name)}
                         sourceGenre={selectedArtistData.genre}
-                        targetArtist={result.artist}
+                        targetArtist={fixArtistName(result.artist)}
                         targetGenre={result.genre}
                         explanation={result.explanation}
                       />
@@ -515,9 +512,9 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
                     {result.sourceFeatures && result.targetFeatures && (
                       <div className="mt-4">
                         <FeatureBreakdown
-                          sourceArtist={selectedArtistData.name}
+                          sourceArtist={fixArtistName(selectedArtistData.name)}
                           sourceFeatures={result.sourceFeatures}
-                          targetArtist={result.artist}
+                          targetArtist={fixArtistName(result.artist)}
                           targetFeatures={result.targetFeatures}
                           explanation={result.explanation}
                         />
@@ -542,7 +539,7 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
                   className="mt-4 w-full"
                   disabled={!selectedArtistData}
                 >
-                  Generate Song: {selectedArtistData?.name} writes {result.genre} in style of {result.artist}
+                  Generate Song: {fixArtistName(selectedArtistData?.name || "")} writes {formatGenreDisplay(result.genre)} in style of {fixArtistName(result.artist)}
                 </Button>
               </Card>
             </div>
