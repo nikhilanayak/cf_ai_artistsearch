@@ -314,7 +314,7 @@ function ChatPage({
             <h2 className="font-semibold text-base">
               {preselectedArtists 
                 ? `${preselectedArtists.sourceArtist} writes ${formatGenreDisplay(preselectedArtists.targetGenre)} in style of ${preselectedArtists.targetArtist}`
-                : "AI Chat Agent"}
+                : "Artist Search"}
             </h2>
           </div>
 

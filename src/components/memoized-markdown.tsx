@@ -6,18 +6,30 @@ import { Streamdown } from "streamdown";
 function parseMarkdownIntoBlocks(markdown: string): string[] {
   let processedMarkdown = markdown;
   
-  // If there are no newlines at all but the text is long, it might be lyrics without formatting
-  // Try to intelligently add newlines based on common lyric patterns
-  if (!markdown.includes('\n') && markdown.length > 50) {
-    processedMarkdown = markdown
-      // Add newline before section markers like [Verse], [Chorus], etc.
-      .replace(/(\[(?:Verse|Chorus|Bridge|Outro|Intro|Pre-Chorus)\s*\d*\])/gi, '\n\n$1\n')
+  // Detect if this looks like song lyrics (has section markers or patterns)
+  const hasSectionMarkers = /(?:\[?(?:Verse|Chorus|Bridge|Outro|Intro|Pre-Chorus)\s*\d*:?\]?)/gi.test(markdown);
+  const hasFewNewlines = (markdown.match(/\n/g) || []).length < 5 && markdown.length > 100;
+  const looksLikeLyrics = hasSectionMarkers || (hasFewNewlines && markdown.length > 100);
+  
+  // If it looks like lyrics but is poorly formatted, fix it
+  if (looksLikeLyrics) {
+    processedMarkdown = processedMarkdown
+      // First, ensure section markers have newlines before them (with or without brackets)
+      .replace(/([^\n])(\[?(?:Verse|Chorus|Bridge|Outro|Intro|Pre-Chorus)\s*\d*:?\]?)/gi, '$1\n\n$2')
+      // Ensure proper spacing after section markers (add newline if missing)
+      .replace(/(\[?(?:Verse|Chorus|Bridge|Outro|Intro|Pre-Chorus)\s*\d*:?\]?)([^\n])/gi, '$1\n$2')
       // Add newline after sentence endings (period, exclamation, question) followed by capital letters
       // This helps break up verses that run together
       .replace(/([.!?])\s+([A-Z][a-z])/g, '$1\n$2')
       // For lyrics that might have lines separated by capital letters at start of "sentences"
       // Look for patterns like "word. Capital" which might be line breaks
-      .replace(/([a-z])\s+([A-Z][a-z]{2,}\s)/g, '$1\n$2');
+      .replace(/([a-z])\s+([A-Z][a-z]{2,}\s)/g, '$1\n$2')
+      // Clean up multiple consecutive newlines (more than 2)
+      .replace(/\n{3,}/g, '\n\n')
+      // Trim leading/trailing whitespace from each line
+      .split('\n')
+      .map(line => line.trim())
+      .join('\n');
   }
   
   // Convert single newlines to markdown line breaks (two spaces + newline)

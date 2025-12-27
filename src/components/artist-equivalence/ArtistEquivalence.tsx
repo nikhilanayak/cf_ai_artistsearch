@@ -214,9 +214,13 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
   return (
     <Card className="p-6 space-y-6">
       <div>
-        <h2 className="text-xl font-semibold mb-4">Find Equivalent Artists</h2>
+        <h2 className="text-xl font-semibold mb-4">Artist Search</h2>
         <p className="text-sm text-muted-foreground mb-4">
-          Find artists in different genres that are similar to each other!
+          Ever wondered who the Taylor Swift of Rap is? Let's find out!
+          <br/>
+          <br/>
+          Choose an artist and a target genre, and I'll find the equivalent artist in that genre.
+
         </p>
       </div>
 
@@ -237,95 +241,98 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
         </div>
       )}
 
-      {/* Selection UI: [Genre Filter] + [Artist] + [Target Genre] = [Button] */}
-      <div className="flex flex-col sm:flex-row gap-4 items-center">
-        <div className="flex-1 w-full relative" ref={genreFilterDropdownRef}>
-          <Label htmlFor="genre-filter" title="Filter by Genre (Optional)" />
-          <input
-            id="genre-filter"
-            type="text"
-            autoComplete="off"
-            value={genreFilterSearch}
-            onChange={(e) => {
-              setGenreFilterSearch(e.target.value);
-              setShowGenreFilterDropdown(true);
-              // Clear filter if search doesn't match selected filter
-              if (genreFilter && e.target.value !== genreFilter) {
-                setGenreFilter("");
-              }
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && filteredGenresForFilter.length === 1) {
-                e.preventDefault();
-                const genre = filteredGenresForFilter[0];
-                setGenreFilter(genre);
-                setGenreFilterSearch(genre);
-                setShowGenreFilterDropdown(false);
-                // Clear artist selection if it no longer matches filter
-                if (selectedArtistData && selectedArtistData.genre.toLowerCase() !== genre.toLowerCase()) {
-                  setSelectedArtist("");
-                  setArtistSearch("");
-                }
-                // Auto-focus artist input
-                setTimeout(() => artistInputRef.current?.focus(), 100);
-              }
-            }}
-            onFocus={() => setShowGenreFilterDropdown(true)}
-            placeholder="Filter by genre..."
-            className="w-full add-size-base btn btn-secondary border border-ob-border focus:border-ob-border-active focus:outline-none px-3 rounded-md"
-          />
-          {showGenreFilterDropdown && (
-            <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-md shadow-lg max-h-60 overflow-auto">
-              <button
-                type="button"
-                onClick={() => {
+      {/* Selection UI: [Genre Filter above] [Artist] + [Target Genre] = [Button] */}
+      <div className="flex flex-col gap-4">
+        {/* Genre Filter above Artist box */}
+        <div className="flex flex-col items-start gap-2">
+          <div className="w-full max-w-[85%] relative" ref={genreFilterDropdownRef}>
+            <Label htmlFor="genre-filter" title="Filter by Genre (Optional)" />
+            <input
+              id="genre-filter"
+              type="text"
+              autoComplete="off"
+              value={genreFilterSearch}
+              onChange={(e) => {
+                setGenreFilterSearch(e.target.value);
+                setShowGenreFilterDropdown(true);
+                // Clear filter if search doesn't match selected filter
+                if (genreFilter && e.target.value !== genreFilter) {
                   setGenreFilter("");
-                  setGenreFilterSearch("");
+                }
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && filteredGenresForFilter.length === 1) {
+                  e.preventDefault();
+                  const genre = filteredGenresForFilter[0];
+                  setGenreFilter(genre);
+                  setGenreFilterSearch(genre);
                   setShowGenreFilterDropdown(false);
+                  // Clear artist selection if it no longer matches filter
+                  if (selectedArtistData && selectedArtistData.genre.toLowerCase() !== genre.toLowerCase()) {
+                    setSelectedArtist("");
+                    setArtistSearch("");
+                  }
                   // Auto-focus artist input
                   setTimeout(() => artistInputRef.current?.focus(), 100);
-                }}
-                className={`w-full text-left px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
-                  !genreFilter ? "bg-neutral-100 dark:bg-neutral-800" : ""
-                }`}
-              >
-                <div className="font-medium">All genres</div>
-              </button>
-              {filteredGenresForFilter.map((genre) => (
+                }
+              }}
+              onFocus={() => setShowGenreFilterDropdown(true)}
+              placeholder="Filter by genre..."
+              className="w-full add-size-base btn btn-secondary border border-ob-border focus:border-ob-border-active focus:outline-none px-3 rounded-md"
+            />
+            {showGenreFilterDropdown && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded-md shadow-lg max-h-60 overflow-auto">
                 <button
-                  key={genre}
                   type="button"
                   onClick={() => {
-                    setGenreFilter(genre);
-                    setGenreFilterSearch(genre);
+                    setGenreFilter("");
+                    setGenreFilterSearch("");
                     setShowGenreFilterDropdown(false);
-                    // Clear artist selection if it no longer matches filter
-                    if (selectedArtistData && selectedArtistData.genre.toLowerCase() !== genre.toLowerCase()) {
-                      setSelectedArtist("");
-                      setArtistSearch("");
-                    }
                     // Auto-focus artist input
                     setTimeout(() => artistInputRef.current?.focus(), 100);
                   }}
                   className={`w-full text-left px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
-                    genreFilter === genre ? "bg-neutral-100 dark:bg-neutral-800" : ""
+                    !genreFilter ? "bg-neutral-100 dark:bg-neutral-800" : ""
                   }`}
                 >
-                  <div className="font-medium">{formatGenreDisplay(genre)}</div>
+                  <div className="font-medium">All genres</div>
                 </button>
-              ))}
-            </div>
-          )}
-          {genreFilter && (
-            <div className="mt-2 text-sm text-muted-foreground">
-              Filter: <span className="font-medium">{formatGenreDisplay(genreFilter)}</span>
-            </div>
-          )}
+                {filteredGenresForFilter.map((genre) => (
+                  <button
+                    key={genre}
+                    type="button"
+                    onClick={() => {
+                      setGenreFilter(genre);
+                      setGenreFilterSearch(genre);
+                      setShowGenreFilterDropdown(false);
+                      // Clear artist selection if it no longer matches filter
+                      if (selectedArtistData && selectedArtistData.genre.toLowerCase() !== genre.toLowerCase()) {
+                        setSelectedArtist("");
+                        setArtistSearch("");
+                      }
+                      // Auto-focus artist input
+                      setTimeout(() => artistInputRef.current?.focus(), 100);
+                    }}
+                    className={`w-full text-left px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 ${
+                      genreFilter === genre ? "bg-neutral-100 dark:bg-neutral-800" : ""
+                    }`}
+                  >
+                    <div className="font-medium">{formatGenreDisplay(genre)}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+            {genreFilter && (
+              <div className="mt-2 text-sm text-muted-foreground">
+                Filter: <span className="font-medium">{formatGenreDisplay(genreFilter)}</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="text-2xl font-bold text-muted-foreground self-center">+</div>
-
-        <div className="flex-1 w-full relative" ref={artistDropdownRef}>
+        {/* Artist + Target Genre + Button row */}
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          <div className="flex-1 w-full relative" ref={artistDropdownRef}>
           <Label htmlFor="artist-search" title="Artist" />
           <input
             id="artist-search"
@@ -461,16 +468,17 @@ export function ArtistEquivalence({ onGenerateSong }: ArtistEquivalenceProps) {
 
         <div className="text-2xl font-bold text-muted-foreground self-center">=</div>
 
-        <div className="flex flex-col">
-          <Label htmlFor="find-button" title=" " className="invisible" />
-          <Button
-            id="find-button"
-            onClick={handleFindEquivalent}
-            disabled={!selectedArtist || !selectedGenre || !selectedArtistData || loading}
-            className="whitespace-nowrap"
-          >
-            {loading ? "Finding..." : "Find Equivalent"}
-          </Button>
+          <div className="flex flex-col">
+            <Label htmlFor="find-button" title=" " className="invisible" />
+            <Button
+              id="find-button"
+              onClick={handleFindEquivalent}
+              disabled={!selectedArtist || !selectedGenre || !selectedArtistData || loading}
+              className="whitespace-nowrap"
+            >
+              {loading ? "Finding..." : "Find Equivalent"}
+            </Button>
+          </div>
         </div>
       </div>
 
